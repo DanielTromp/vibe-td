@@ -1,4 +1,4 @@
-﻿
+
 /* --------------------------------------------------
    1. GLOBAL SETTINGS & CONSTANTS
    -------------------------------------------------- */
@@ -1301,7 +1301,7 @@ function resetGame() {
   nextWaveReady = true;
   gameOver = false;
 
-  money = 200;
+  money = 500;
   lives = 10;
   score = 0;
 
