@@ -1,54 +1,65 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tower Defence</title>
+  <title>Tower Defense</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Tower Defence</h1>
+  <h1>Tower Defense</h1>
+
+  <div id="mapMenu" class="overlay hidden">
+    <div class="menu-panel">
+      <h2>Select a Map</h2>
+      <p>Pick a level to play. You can build towers before starting the first wave.</p>
+      <div id="mapList" class="map-list"></div>
+      <button id="closeMapMenuButton" class="secondary-button">Cancel</button>
+    </div>
+  </div>
   
   <div id="gameContainer">
     <canvas id="gameCanvas" width="600" height="400"></canvas>
     <div id="gameOverScreen" class="hidden">
       <h2>Game Over</h2>
-      <p>Je eindscore: <span id="finalScore">0</span></p>
-      <button id="restartButton">Opnieuw spelen</button>
+      <p>Your final score: <span id="finalScore">0</span></p>
+      <button id="restartButton">Play Again</button>
     </div>
   </div>
-  
+
   <div id="hud">
     <div class="hud-section">
-      <h2>Bouwen</h2>
+      <h2>Build</h2>
       <div class="button-row">
-        <button id="placeBasicTower">Basis Toren (100)</button>
-        <button id="placeRapidTower">Snelle Toren (150)</button>
-        <button id="placeSniperTower">Sniper Toren (220)</button>
-        <button id="placeFrostTower">Vorst Toren (170)</button>
+        <button id="placeBasicTower">Basic Tower (100)</button>
+        <button id="placeRapidTower">Rapid Tower (150)</button>
+        <button id="placeSniperTower">Sniper Tower (220)</button>
+        <button id="placeFrostTower">Frost Tower (170)</button>
       </div>
     </div>
-    
+
     <div class="hud-section">
-      <h2>Spelstatus</h2>
+      <h2>Game Status</h2>
       <div class="status-row">
-        <button id="pauseButton">Pauze</button>
-        <button id="nextWaveButton" class="primary">Start volgende golf</button>
-        <span id="money">Geld: 200</span>
-        <span id="lives">Levens: 10</span>
-        <span id="wave">Golf: 0</span>
+        <button id="pauseButton">Pause</button>
+        <button id="nextWaveButton" class="primary">Start Next Wave</button>
+        <button id="changeMapButton">Change Map</button>
+        <span id="money">Money: 0</span>
+        <span id="lives">Lives: 0</span>
+        <span id="wave">Wave: 0</span>
         <span id="score">Score: 0</span>
       </div>
       <div class="info-row">
-        <span id="waveProgress">Geen golf actief</span>
+        <span id="waveProgress">No wave in progress</span>
         <span id="statusMessage"></span>
       </div>
       <div class="info-row">
+        <span id="mapName">Map: Not selected</span>
         <span id="currentWaveInfo"></span>
         <span id="nextWaveInfo"></span>
       </div>
     </div>
   </div>
-  
+
   <div id="towerDetails" class="panel hidden">
     <h2 id="towerTitle"></h2>
     <p id="towerDescription"></p>
@@ -56,7 +67,7 @@
     <p id="towerUpgradeInfo"></p>
     <div class="button-row">
       <button id="upgradeTowerButton">Upgrade</button>
-      <button id="sellTowerButton">Verkopen</button>
+      <button id="sellTowerButton">Sell</button>
     </div>
   </div>
   

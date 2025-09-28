@@ -13,21 +13,65 @@ const STATUS_DEFAULT_DURATION = 180; // frames (~3 seconds)
 const SPAWN_INTERVAL_BASE = 45;      // base frames between spawns
 const SELL_REFUND_RATIO = 0.65;
 
-const BASE_MAP = [
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-  [0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+const MAP_LIBRARY = [
+  {
+    id: 'gauntlet-run',
+    name: 'Gauntlet Run',
+    description: 'A straight approach into a narrow choke point. Great for testing core strategies.',
+    layout: [
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,1,1,1,1,1,1,1,1,1,1,1,1,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    ],
+    path: [
+      { row: 1, col: 1 }, { row: 1, col: 2 }, { row: 1, col: 3 }, { row: 1, col: 4 }, { row: 1, col: 5 },
+      { row: 1, col: 6 }, { row: 1, col: 7 }, { row: 1, col: 8 }, { row: 1, col: 9 }, { row: 1, col: 10 },
+      { row: 1, col: 11 }, { row: 1, col: 12 }, { row: 1, col: 13 },
+      { row: 2, col: 13 }, { row: 3, col: 13 }, { row: 4, col: 13 }, { row: 5, col: 13 },
+      { row: 6, col: 13 }, { row: 7, col: 13 }, { row: 8, col: 13 }
+    ]
+  },
+  {
+    id: 'crossroads',
+    name: 'Crossroads',
+    description: 'A looping path that gives enemies multiple angles of attack.',
+    layout: [
+      [0,1,1,1,1,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,1,0,0,0,0,0,0,1,1,1,1],
+      [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0],
+      [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0],
+      [0,0,0,0,1,1,1,1,1,1,1,1,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    ],
+    path: [
+      { row: 0, col: 1 }, { row: 0, col: 2 }, { row: 0, col: 3 }, { row: 0, col: 4 },
+      { row: 1, col: 4 }, { row: 2, col: 4 }, { row: 3, col: 4 }, { row: 4, col: 4 }, { row: 5, col: 4 },
+      { row: 6, col: 4 }, { row: 6, col: 5 }, { row: 6, col: 6 }, { row: 6, col: 7 }, { row: 6, col: 8 },
+      { row: 6, col: 9 }, { row: 6, col: 10 }, { row: 6, col: 11 },
+      { row: 5, col: 11 }, { row: 4, col: 11 }, { row: 3, col: 11 }, { row: 3, col: 12 },
+      { row: 3, col: 13 }, { row: 3, col: 14 }
+    ]
+  }
 ];
 
-let MAP = cloneMap(BASE_MAP);
-const PATH = buildPath(MAP);
+function createEmptyMap() {
+  return Array.from({ length: MAP_ROWS }, () => Array(MAP_COLS).fill(0));
+}
+
+let currentMapConfig = null;
+let MAP = createEmptyMap();
+let PATH = [];
 
 /* --------------------------------------------------
    2. GAME STATE
@@ -45,11 +89,11 @@ let spawnCooldown = 0;
 
 let wave = 0;
 let waveInProgress = false;
-let nextWaveReady = true;
+let nextWaveReady = false;
 let gameOver = false;
 
-let money = 500;
-let lives = 10;
+let money = 0;
+let lives = 0;
 let score = 0;
 
 let selectedTowerType = 'basic';
@@ -68,7 +112,14 @@ function cloneMap(source) {
   return source.map(row => row.slice());
 }
 
-function buildPath(map) {
+function buildPath(map, pathDefinition = null) {
+  if (pathDefinition && pathDefinition.length > 0) {
+    return pathDefinition.map(({ row, col }) => ({
+      x: col * TILE_SIZE + (TILE_SIZE - 30) / 2,
+      y: row * TILE_SIZE + (TILE_SIZE - 30) / 2
+    }));
+  }
+
   const path = [];
   for (let r = 0; r < MAP_ROWS; r++) {
     for (let c = 0; c < MAP_COLS; c++) {
@@ -81,6 +132,23 @@ function buildPath(map) {
     }
   }
   return path;
+}
+
+function setCurrentMap(config) {
+  currentMapConfig = config || null;
+  refreshMapLayout();
+  updateMapNameDisplay();
+}
+
+function refreshMapLayout() {
+  if (!currentMapConfig) {
+    MAP = createEmptyMap();
+    PATH = [];
+    return;
+  }
+
+  MAP = cloneMap(currentMapConfig.layout);
+  PATH = buildPath(MAP, currentMapConfig.path);
 }
 
 function distance(ax, ay, bx, by) {
@@ -96,7 +164,7 @@ function shuffle(array) {
 }
 
 function summariseTypes(types) {
-  if (!types || types.length === 0) return 'geen gegevens';
+  if (!types || types.length === 0) return 'no data';
   const counts = types.reduce((acc, type) => {
     acc[type] = (acc[type] || 0) + 1;
     return acc;
@@ -108,11 +176,11 @@ function summariseTypes(types) {
 
 function getEnemyLabel(type) {
   switch (type) {
-    case 'fast': return 'Snelle';
-    case 'tank': return 'Pantser';
-    case 'swarm': return 'Zwerm';
-    case 'boss': return 'Baas';
-    default: return 'Basis';
+    case 'fast': return 'Fast';
+    case 'tank': return 'Armored';
+    case 'swarm': return 'Swarm';
+    case 'boss': return 'Boss';
+    default: return 'Basic';
   }
 }
 
@@ -211,7 +279,7 @@ class Enemy {
     this.dead = true;
     lives = Math.max(0, lives - this.lifeDamage);
     updateLivesDisplay();
-    setStatusMessage('Een vijand bereikte de basis!', 150);
+    setStatusMessage('An enemy reached the base!', 150);
   }
 
   takeDamage(amount) {
@@ -542,13 +610,13 @@ class Tower {
 class BasicTower extends Tower {
   constructor(x, y) {
     super(x, y, {
-      name: 'Basis Toren',
+      name: 'Basic Tower',
       type: 'basic',
       cost: 100,
       bodyColor: '#3f51b5',
       projectileColor: '#ffeb3b',
       trailColor: '#ffeb3b',
-      description: 'Allround toren met gebalanceerde statistieken.',
+      description: 'Balanced range and damage to support every strategy.',
       levelStats: [
         { range: 110, fireRate: 70, damage: 3, projectileSpeed: 6 },
         { range: 125, fireRate: 60, damage: 4, projectileSpeed: 7 },
@@ -562,13 +630,13 @@ class BasicTower extends Tower {
 class RapidTower extends Tower {
   constructor(x, y) {
     super(x, y, {
-      name: 'Snelle Toren',
+      name: 'Rapid Tower',
       type: 'rapid',
       cost: 150,
       bodyColor: '#f44336',
       projectileColor: '#ff9800',
       trailColor: '#ff9800',
-      description: 'Vuurt razendsnel maar met lagere schade.',
+      description: 'Fires quickly with lower damage per shot.',
       levelStats: [
         { range: 95, fireRate: 35, damage: 2, projectileSpeed: 6 },
         { range: 110, fireRate: 28, damage: 2.8, projectileSpeed: 7 },
@@ -582,13 +650,13 @@ class RapidTower extends Tower {
 class SniperTower extends Tower {
   constructor(x, y) {
     super(x, y, {
-      name: 'Sniper Toren',
+      name: 'Sniper Tower',
       type: 'sniper',
       cost: 220,
       bodyColor: '#673ab7',
       projectileColor: '#d1c4e9',
       trailColor: '#d1c4e9',
-      description: 'Extreem bereik en enorme schade maar trager.',
+      description: 'Extreme range and high damage with a slower fire rate.',
       levelStats: [
         { range: 180, fireRate: 140, damage: 10, projectileSpeed: 9 },
         { range: 200, fireRate: 120, damage: 14, projectileSpeed: 10 },
@@ -602,13 +670,13 @@ class SniperTower extends Tower {
 class FrostTower extends Tower {
   constructor(x, y) {
     super(x, y, {
-      name: 'Vorst Toren',
+      name: 'Frost Tower',
       type: 'frost',
       cost: 170,
       bodyColor: '#00acc1',
       projectileColor: '#b2ebf2',
       trailColor: '#b2ebf2',
-      description: 'Vertraagt vijanden zodat andere torens meer tijd krijgen.',
+      description: 'Slows enemies to give your other towers more time.',
       levelStats: [
         { range: 120, fireRate: 75, damage: 2, projectileSpeed: 6, special: { slow: { factor: 0.6, duration: 120 } } },
         { range: 135, fireRate: 65, damage: 3, projectileSpeed: 6.5, special: { slow: { factor: 0.5, duration: 150 } } },
@@ -700,7 +768,7 @@ function startNextWave(triggeredByPlayer = false) {
   updateUpcomingWaveInfo(upcomingBlueprint);
   updateNextWaveButton();
 
-  if (triggeredByPlayer) setStatusMessage('Golf ' + wave + ' gestart!', 150);
+  if (triggeredByPlayer) setStatusMessage('Wave ' + wave + ' started!', 150);
   updateWaveProgressLabel();
 }
 
@@ -712,7 +780,7 @@ function handleWaveCompleted() {
   money += reward;
   updateMoneyDisplay();
 
-  setStatusMessage('Golf ' + wave + ' verslagen! Bonus: ' + reward, 240);
+  setStatusMessage('Wave ' + wave + ' defeated! Bonus: ' + reward, 240);
   updateCurrentWaveInfo([]);
   prepareNextWave();
 }
@@ -725,23 +793,82 @@ function prepareNextWave() {
   updateNextWaveButton();
 }
 /* --------------------------------------------------
-   9. UI & HUD UPDATES
+   9. MAP MENU & HUD UPDATES
    -------------------------------------------------- */
+function populateMapMenu() {
+  const list = document.getElementById('mapList');
+  if (!list) return;
+
+  list.innerHTML = '';
+  MAP_LIBRARY.forEach((mapConfig) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'map-option';
+
+    const title = document.createElement('span');
+    title.className = 'map-title';
+    title.textContent = mapConfig.name;
+
+    const description = document.createElement('span');
+    description.className = 'map-description';
+    description.textContent = mapConfig.description;
+
+    button.appendChild(title);
+    button.appendChild(description);
+    if (currentMapConfig && currentMapConfig.id === mapConfig.id) {
+      button.classList.add('active-map');
+    }
+    button.addEventListener('click', () => handleMapSelection(mapConfig.id));
+    list.appendChild(button);
+  });
+}
+
+function showMapMenu() {
+  populateMapMenu();
+  const closeButton = document.getElementById('closeMapMenuButton');
+  if (closeButton) closeButton.classList.toggle('hidden', !currentMapConfig);
+  const menu = document.getElementById('mapMenu');
+  if (menu) menu.classList.remove('hidden');
+}
+
+function hideMapMenu() {
+  const menu = document.getElementById('mapMenu');
+  if (menu) menu.classList.add('hidden');
+}
+
+function handleMapSelection(mapId) {
+  const config = MAP_LIBRARY.find((map) => map.id === mapId);
+  if (!config) return;
+
+  setCurrentMap(config);
+  hideMapMenu();
+  resetGame();
+  setStatusMessage(config.name + ' loaded. Build your defenses and press "Start Wave 1" when ready.', 360);
+}
+
+function updateMapNameDisplay() {
+  const el = document.getElementById('mapName');
+  if (!el) return;
+  el.textContent = currentMapConfig
+    ? 'Map: ' + currentMapConfig.name
+    : 'Map: Not selected';
+}
+
 function updateMoneyDisplay() {
   const el = document.getElementById('money');
-  if (el) el.textContent = 'Geld: ' + money;
+  if (el) el.textContent = 'Money: ' + money;
   updateTowerButtons();
   updateTowerDetails();
 }
 
 function updateLivesDisplay() {
   const el = document.getElementById('lives');
-  if (el) el.textContent = 'Levens: ' + lives;
+  if (el) el.textContent = 'Lives: ' + lives;
 }
 
 function updateWaveDisplay() {
   const el = document.getElementById('wave');
-  if (el) el.textContent = 'Golf: ' + wave;
+  if (el) el.textContent = 'Wave: ' + wave;
 }
 
 function updateScoreDisplay() {
@@ -754,35 +881,55 @@ function updateWaveProgressLabel() {
   if (!el) return;
   const remaining = enemies.length + spawnQueue.length;
   if (waveInProgress) {
-    el.textContent = 'Golf ' + wave + ': ' + remaining + ' vijanden';
+    el.textContent = 'Wave ' + wave + ': ' + remaining + ' enemies';
   } else if (wave === 0) {
-    el.textContent = 'Geen golf actief';
+    el.textContent = 'No wave in progress';
   } else {
-    el.textContent = 'Golf ' + wave + ' voltooid';
+    el.textContent = 'Wave ' + wave + ' cleared';
   }
 }
 
 function updateCurrentWaveInfo(blueprint) {
   const el = document.getElementById('currentWaveInfo');
   if (!el) return;
+  if (wave === 0) {
+    el.textContent = 'No wave started yet';
+    return;
+  }
   el.textContent = blueprint.length > 0
-    ? 'Golf ' + wave + ': ' + summariseTypes(blueprint)
-    : 'Golf ' + wave + ' voltooid';
+    ? 'Wave ' + wave + ': ' + summariseTypes(blueprint)
+    : 'Wave ' + wave + ' cleared';
 }
 
 function updateUpcomingWaveInfo(blueprint) {
   const el = document.getElementById('nextWaveInfo');
   if (!el) return;
   el.textContent = blueprint.length > 0
-    ? 'Volgende golf (' + (wave + 1) + '): ' + summariseTypes(blueprint)
-    : 'Volgende golf onbekend';
+    ? 'Next wave (' + (wave + 1) + '): ' + summariseTypes(blueprint)
+    : 'Next wave unknown';
 }
 
 function updateNextWaveButton() {
   const button = document.getElementById('nextWaveButton');
   if (!button) return;
+  if (!currentMapConfig) {
+    button.disabled = true;
+    button.classList.remove('ready');
+    button.textContent = 'Select a Map';
+    return;
+  }
   button.disabled = !nextWaveReady || gameOver;
   button.classList.toggle('ready', nextWaveReady && !gameOver);
+
+  let label = 'Start Next Wave';
+  if (gameOver) {
+    label = 'Start Next Wave';
+  } else if (!nextWaveReady) {
+    label = 'Wave In Progress';
+  } else {
+    label = wave === 0 ? 'Start Wave 1' : 'Send Next Wave';
+  }
+  button.textContent = label;
 }
 
 function updateTowerButtons() {
@@ -827,15 +974,15 @@ function selectTower(tower) {
   }
 
   panel.classList.remove('hidden');
-  document.getElementById('towerTitle').textContent = tower.name + ' (niveau ' + tower.level + ')';
+  document.getElementById('towerTitle').textContent = tower.name + ' (level ' + tower.level + ')';
   document.getElementById('towerDescription').textContent = tower.description;
 
   const shotsPerSecond = FPS / tower.fireRate;
   const dps = shotsPerSecond * tower.damage;
   document.getElementById('towerStats').textContent =
-    'Bereik: ' + Math.round(tower.range) +
-    ' | Schade: ' + formatNumber(tower.damage, 1) +
-    ' | Schoten/s: ' + formatNumber(shotsPerSecond, 2) +
+    'Range: ' + Math.round(tower.range) +
+    ' | Damage: ' + formatNumber(tower.damage, 1) +
+    ' | Shots/s: ' + formatNumber(shotsPerSecond, 2) +
     ' | DPS: ' + formatNumber(dps, 1);
 
   const upgradeBtn = document.getElementById('upgradeTowerButton');
@@ -843,16 +990,16 @@ function selectTower(tower) {
   const upgradeCost = tower.getUpgradeCost();
 
   if (upgradeCost === null) {
-    document.getElementById('towerUpgradeInfo').textContent = 'Maximaal niveau bereikt.';
+    document.getElementById('towerUpgradeInfo').textContent = 'Maximum level reached.';
     upgradeBtn.textContent = 'Upgrade';
     upgradeBtn.disabled = true;
   } else {
-    document.getElementById('towerUpgradeInfo').textContent = 'Upgradekosten: ' + upgradeCost;
+    document.getElementById('towerUpgradeInfo').textContent = 'Upgrade cost: ' + upgradeCost;
     upgradeBtn.textContent = 'Upgrade (' + upgradeCost + ')';
     upgradeBtn.disabled = money < upgradeCost;
   }
 
-  sellBtn.textContent = 'Verkoop (' + tower.getSellValue() + ')';
+  sellBtn.textContent = 'Sell (' + tower.getSellValue() + ')';
   sellBtn.disabled = false;
 }
 
@@ -871,14 +1018,14 @@ function cancelPlacementMode() {
 function setPlacementMode(type) {
   const def = TOWER_TYPES[type] || TOWER_TYPES.basic;
   if (money < def.cost) {
-    setStatusMessage('Niet genoeg geld voor deze toren.', 120);
+    setStatusMessage('Not enough money for this tower.', 120);
     return;
   }
   selectedTowerType = type;
   placeTowerMode = true;
   placementGhost = null;
   selectTower(null);
-  setStatusMessage('Klik op een vrije tegel om te bouwen.', 120);
+  setStatusMessage('Click an empty tile to build.', 120);
   updateTowerButtons();
 }
 
@@ -934,14 +1081,14 @@ function handleCanvasMove(e) {
 function tryPlaceTower(row, col) {
   if (row < 0 || row >= MAP_ROWS || col < 0 || col >= MAP_COLS) return;
   if (MAP[row][col] !== 0) {
-    setStatusMessage('Deze tegel is bezet of onderdeel van het pad.', 120);
+    setStatusMessage('This tile is occupied or part of the path.', 120);
     cancelPlacementMode();
     return;
   }
 
   const def = TOWER_TYPES[selectedTowerType] || TOWER_TYPES.basic;
   if (money < def.cost) {
-    setStatusMessage('Niet genoeg geld voor deze toren.', 120);
+    setStatusMessage('Not enough money for this tower.', 120);
     cancelPlacementMode();
     return;
   }
@@ -955,7 +1102,7 @@ function tryPlaceTower(row, col) {
   MAP[row][col] = 2;
 
   playPlaceTowerSound();
-  setStatusMessage(tower.name + ' geplaatst!', 120);
+  setStatusMessage(tower.name + ' placed!', 120);
   cancelPlacementMode();
   selectTower(tower);
 }
@@ -964,11 +1111,11 @@ function handleUpgradeTower() {
   if (!selectedTower) return;
   const cost = selectedTower.getUpgradeCost();
   if (cost === null) {
-    setStatusMessage('Deze toren is al maximaal geupgrade.', 120);
+    setStatusMessage('This tower is already at max level.', 120);
     return;
   }
   if (money < cost) {
-    setStatusMessage('Niet genoeg geld om te upgraden.', 120);
+    setStatusMessage('Not enough money to upgrade.', 120);
     return;
   }
 
@@ -976,7 +1123,7 @@ function handleUpgradeTower() {
   selectedTower.totalInvested += cost;
   if (selectedTower.upgrade()) {
     playPlaceTowerSound();
-    setStatusMessage(selectedTower.name + ' geupgrade naar niveau ' + selectedTower.level + '!', 150);
+    setStatusMessage(selectedTower.name + ' upgraded to level ' + selectedTower.level + '!', 150);
   }
   updateMoneyDisplay();
   updateTowerButtons();
@@ -994,7 +1141,7 @@ function handleSellTower() {
 
   money += value;
   updateMoneyDisplay();
-  setStatusMessage(selectedTower.name + ' verkocht voor ' + value + '.', 150);
+  setStatusMessage(selectedTower.name + ' sold for ' + value + '.', 150);
   selectTower(null);
 }
 
@@ -1002,10 +1149,10 @@ function togglePause() {
   paused = !paused;
   const btn = document.getElementById('pauseButton');
   if (btn) {
-    btn.textContent = paused ? 'Hervat' : 'Pauze';
+    btn.textContent = paused ? 'Resume' : 'Pause';
     btn.classList.toggle('paused', paused);
   }
-  setStatusMessage(paused ? 'Spel gepauzeerd.' : 'Spel hervat.', 90);
+  setStatusMessage(paused ? 'Game paused.' : 'Game resumed.', 90);
 }
 /* --------------------------------------------------
    11. GAME LOOP
@@ -1087,7 +1234,7 @@ function render() {
     ctx.font = 'bold 28px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('Gepauzeerd', CANVAS_W / 2, CANVAS_H / 2);
+    ctx.fillText('Paused', CANVAS_W / 2, CANVAS_H / 2);
   }
 }
 
@@ -1119,7 +1266,7 @@ function triggerGameOver() {
   showGameOverScreen();
   nextWaveReady = false;
   updateNextWaveButton();
-  setStatusMessage('De basis is gevallen...', 300);
+  setStatusMessage('The base has fallen...', 300);
 }
 
 function showGameOverScreen() {
@@ -1135,6 +1282,11 @@ function hideGameOverScreen() {
 }
 
 function resetGame() {
+  if (!currentMapConfig) {
+    showMapMenu();
+    return;
+  }
+
   cancelPlacementMode();
   enemies = [];
   towers = [];
@@ -1153,7 +1305,8 @@ function resetGame() {
   lives = 10;
   score = 0;
 
-  MAP = cloneMap(BASE_MAP);
+  refreshMapLayout();
+  updateMapNameDisplay();
   selectedTower = null;
   placementGhost = null;
   paused = false;
@@ -1173,12 +1326,12 @@ function resetGame() {
 
   const pauseButton = document.getElementById('pauseButton');
   if (pauseButton) {
-    pauseButton.textContent = 'Pauze';
+    pauseButton.textContent = 'Pause';
     pauseButton.classList.remove('paused');
   }
 
   prepareNextWave();
-  startNextWave();
+  setStatusMessage('Build your defenses and press "Start Wave 1" when ready.', 300);
   startGameLoop();
 }
 
@@ -1199,6 +1352,14 @@ function init() {
   document.getElementById('pauseButton').addEventListener('click', togglePause);
   document.getElementById('restartButton').addEventListener('click', resetGame);
   document.getElementById('nextWaveButton').addEventListener('click', () => startNextWave(true));
+  document.getElementById('changeMapButton').addEventListener('click', () => {
+    cancelPlacementMode();
+    showMapMenu();
+  });
+  document.getElementById('closeMapMenuButton').addEventListener('click', () => {
+    if (!currentMapConfig) return;
+    hideMapMenu();
+  });
 
   canvas.addEventListener('click', handleCanvasClick);
   canvas.addEventListener('mousemove', handleCanvasMove);
@@ -1215,6 +1376,8 @@ function init() {
     }
   });
 
+  populateMapMenu();
+  updateMapNameDisplay();
   updateMoneyDisplay();
   updateLivesDisplay();
   updateWaveDisplay();
@@ -1223,10 +1386,8 @@ function init() {
   updateCurrentWaveInfo([]);
   updateUpcomingWaveInfo([]);
   updateNextWaveButton();
-
-  prepareNextWave();
-  startNextWave();
-  startGameLoop();
+  setStatusMessage('Select a map to begin.', 240);
+  showMapMenu();
 }
 
 /* --------------------------------------------------
