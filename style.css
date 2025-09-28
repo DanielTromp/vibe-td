@@ -14,6 +14,91 @@ h1 {
   text-shadow: 0 0 12px rgba(76, 175, 80, 0.4);
 }
 
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  padding: 20px;
+  z-index: 1000;
+}
+
+.menu-panel {
+  max-width: 520px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  text-align: left;
+}
+
+.menu-panel h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  text-align: center;
+  color: #c8e6c9;
+}
+
+.menu-panel p {
+  margin: 0 0 20px;
+  color: #e0f2f1;
+  text-align: center;
+}
+
+.map-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.map-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  background: rgba(76, 175, 80, 0.25);
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  border-radius: 10px;
+  padding: 16px 18px;
+  text-align: left;
+}
+
+.map-option.active-map {
+  border-color: rgba(33, 150, 243, 0.7);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.35);
+}
+
+.map-option .map-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.map-option .map-description {
+  font-size: 14px;
+  color: #dcedc8;
+}
+
+.map-option:hover {
+  background: rgba(76, 175, 80, 0.4);
+}
+
+.secondary-button {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin-top: 8px;
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 #gameContainer {
   display: inline-block;
   position: relative;
