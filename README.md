@@ -33,4 +33,16 @@ To create a new map, add another object to `MAP_LIBRARY` with an `id`, `name`, `
 2. Ensure the included `CNAME` file matches your custom domain (`td.trmp.dev`).
 3. Wait for GitHub Pages to build the site, then visit your configured domain.
 
+## Working in a dev environment without caching
+This repository is configured to avoid caching so you always receive a fresh copy when testing changes locally or on a staging URL:
+
+- `index.html` disables browser caching with `Cache-Control`, `Pragma`, and `Expires` meta tags.
+- The root-level `_headers` file sets `Cache-Control: no-store` for every asset when deploying to platforms that support static headers (such as Cloudflare Pages), ensuring CSS, JavaScript, and audio reload on every request.
+
+If additional cache busting is required on Cloudflare Pages:
+
+1. Open **Pages → [your project] → Settings → Caching** and set **Cache level** to **Bypass** with **Edge TTL** at `0` seconds.
+2. Add a Pages rule or response header transform that forces `Cache-Control: no-store` for the routes you are testing.
+3. When testing changes, also use the **Purge cache** button or the `wrangler pages deployment purge` command to clear any previously stored assets.
+
 Enjoy defending the vibe!
