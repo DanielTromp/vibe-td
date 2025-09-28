@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>Tower Defence</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Tower Defence</h1>
+  
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <div id="gameOverScreen" class="hidden">
+      <h2>Game Over</h2>
+      <p>Je eindscore: <span id="finalScore">0</span></p>
+      <button id="restartButton">Opnieuw spelen</button>
+    </div>
+  </div>
+  
+  <div id="hud">
+    <div class="hud-section">
+      <h2>Bouwen</h2>
+      <div class="button-row">
+        <button id="placeBasicTower">Basis Toren (100)</button>
+        <button id="placeRapidTower">Snelle Toren (150)</button>
+        <button id="placeSniperTower">Sniper Toren (220)</button>
+        <button id="placeFrostTower">Vorst Toren (170)</button>
+      </div>
+    </div>
+    
+    <div class="hud-section">
+      <h2>Spelstatus</h2>
+      <div class="status-row">
+        <button id="pauseButton">Pauze</button>
+        <button id="nextWaveButton" class="primary">Start volgende golf</button>
+        <span id="money">Geld: 200</span>
+        <span id="lives">Levens: 10</span>
+        <span id="wave">Golf: 0</span>
+        <span id="score">Score: 0</span>
+      </div>
+      <div class="info-row">
+        <span id="waveProgress">Geen golf actief</span>
+        <span id="statusMessage"></span>
+      </div>
+      <div class="info-row">
+        <span id="currentWaveInfo"></span>
+        <span id="nextWaveInfo"></span>
+      </div>
+    </div>
+  </div>
+  
+  <div id="towerDetails" class="panel hidden">
+    <h2 id="towerTitle"></h2>
+    <p id="towerDescription"></p>
+    <p id="towerStats"></p>
+    <p id="towerUpgradeInfo"></p>
+    <div class="button-row">
+      <button id="upgradeTowerButton">Upgrade</button>
+      <button id="sellTowerButton">Verkopen</button>
+    </div>
+  </div>
+  
+  <audio id="shootSound" src="sounds/shoot.mp3" preload="auto"></audio>
+  <audio id="explosionSound" src="sounds/explosion.mp3" preload="auto"></audio>
+  <audio id="placeTowerSound" src="sounds/place.mp3" preload="auto"></audio>
+  <audio id="gameOverSound" src="sounds/gameover.mp3" preload="auto"></audio>
+  <script src="game.js"></script>
+</body>
+</html>
