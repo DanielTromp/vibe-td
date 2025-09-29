@@ -957,6 +957,44 @@ function clearStatusMessage() {
   if (el) el.textContent = '';
 }
 
+function positionTowerDetails(tower) {
+  const panel = document.getElementById('towerDetails');
+  const container = document.getElementById('gameContainer');
+  if (!panel || !container || !canvas || !tower) return;
+
+  const canvasRect = canvas.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+  if (canvasRect.width === 0 || canvasRect.height === 0) return;
+
+  const scaleX = canvasRect.width / canvas.width;
+  const scaleY = canvasRect.height / canvas.height;
+  const anchorX = tower.centerX * scaleX;
+  const anchorYTop = tower.y * scaleY;
+  const anchorYBottom = (tower.y + tower.h) * scaleY;
+
+  const offsetX = canvasRect.left - containerRect.left;
+  const offsetY = canvasRect.top - containerRect.top;
+
+  const panelWidth = panel.offsetWidth;
+  const panelHeight = panel.offsetHeight;
+
+  let left = offsetX + anchorX - panelWidth / 2;
+  const minLeft = offsetX + 8;
+  const maxLeft = offsetX + canvasRect.width - panelWidth - 8;
+  left = Math.max(minLeft, Math.min(left, maxLeft));
+
+  let top = offsetY + anchorYTop - panelHeight - 18;
+  const minTop = offsetY + 8;
+  if (top < minTop) {
+    top = offsetY + anchorYBottom + 18;
+    const maxTop = offsetY + canvasRect.height - panelHeight - 8;
+    top = Math.max(minTop, Math.min(top, maxTop));
+  }
+
+  panel.style.left = left + 'px';
+  panel.style.top = top + 'px';
+}
+
 function selectTower(tower) {
   selectedTower = tower;
   const panel = document.getElementById('towerDetails');
@@ -964,6 +1002,8 @@ function selectTower(tower) {
 
   if (!tower) {
     panel.classList.add('hidden');
+    panel.style.left = '12px';
+    panel.style.top = '12px';
     document.getElementById('towerTitle').textContent = '';
     document.getElementById('towerDescription').textContent = '';
     document.getElementById('towerStats').textContent = '';
@@ -1001,6 +1041,8 @@ function selectTower(tower) {
 
   sellBtn.textContent = 'Sell (' + tower.getSellValue() + ')';
   sellBtn.disabled = false;
+
+  positionTowerDetails(tower);
 }
 
 function updateTowerDetails() {
@@ -1031,9 +1073,15 @@ function setPlacementMode(type) {
 
 function getMousePosition(e) {
   const rect = canvas.getBoundingClientRect();
+  if (rect.width === 0 || rect.height === 0) {
+    return { x: 0, y: 0 };
+  }
+
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
   return {
-    x: e.clientX - rect.left,
-    y: e.clientY - rect.top
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
   };
 }
 
@@ -1364,6 +1412,10 @@ function init() {
   canvas.addEventListener('click', handleCanvasClick);
   canvas.addEventListener('mousemove', handleCanvasMove);
   canvas.addEventListener('mouseleave', () => { placementGhost = null; });
+
+  window.addEventListener('resize', () => {
+    if (selectedTower) positionTowerDetails(selectedTower);
+  });
 
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {

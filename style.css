@@ -14,6 +14,19 @@ h1 {
   text-shadow: 0 0 12px rgba(76, 175, 80, 0.4);
 }
 
+#gameLayout {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin: 24px auto 40px;
+  padding: 0 16px;
+  max-width: 1180px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .overlay {
   position: fixed;
   inset: 0;
@@ -100,18 +113,25 @@ h1 {
 }
 
 #gameContainer {
-  display: inline-block;
   position: relative;
-  margin-top: 20px;
+  flex: 1 1 600px;
+  width: min(100%, 600px);
+  max-width: 600px;
+  box-sizing: border-box;
   border: 2px solid #555;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   background: #333;
-  border-radius: 10px;
-  overflow: hidden;
+  border-radius: 14px;
+  overflow: visible;
 }
 
 #gameCanvas {
   display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  border-radius: 12px;
+  image-rendering: pixelated;
 }
 
 #gameOverScreen {
@@ -131,8 +151,9 @@ h1 {
 }
 
 #hud {
-  max-width: 840px;
-  margin: 20px auto 0;
+  flex: 1 1 340px;
+  max-width: 420px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -184,29 +205,41 @@ h1 {
 }
 
 #towerDetails {
-  max-width: 840px;
-  margin: 10px auto 30px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  padding: 18px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: min(260px, calc(100% - 24px));
+  background: rgba(10, 14, 20, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  pointer-events: auto;
+  z-index: 25;
 }
 
 #towerDetails h2 {
   margin: 0 0 10px;
   text-align: center;
   color: #ffffff;
+  font-size: 18px;
 }
 
 #towerDetails p {
   margin: 6px 0;
   text-align: center;
   color: #e0f7fa;
+  font-size: 14px;
 }
 
 #towerDetails .button-row {
   margin-top: 12px;
+  display: flex;
+  gap: 10px;
+}
+
+#towerDetails .button-row button {
+  flex: 1 1 0;
 }
 
 button {
@@ -222,6 +255,11 @@ button {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
 button:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
@@ -234,6 +272,18 @@ button.primary {
 button.primary:hover {
   background: #1e88e5;
 }
+
+#placeBasicTower { background: #3f51b5; }
+#placeBasicTower:hover { background: #3949ab; }
+
+#placeRapidTower { background: #f44336; }
+#placeRapidTower:hover { background: #e53935; }
+
+#placeSniperTower { background: #673ab7; }
+#placeSniperTower:hover { background: #5e35b1; }
+
+#placeFrostTower { background: #00acc1; }
+#placeFrostTower:hover { background: #0097a7; }
 
 button.disabled {
   opacity: 0.55;
@@ -274,7 +324,43 @@ button.active {
   border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-@media (max-width: 700px) {
-  #hud { padding: 0 10px; }
-  button { width: 100%; max-width: 240px; }
+@media (max-width: 1080px) {
+  #hud {
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 900px) {
+  #gameLayout {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  #gameContainer,
+  #hud {
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 720px) {
+  #hud {
+    max-width: 100%;
+  }
+
+  .button-row,
+  .status-row,
+  .info-row {
+    justify-content: center;
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+    max-width: none;
+  }
+
+  #towerDetails {
+    width: min(320px, calc(100% - 24px));
+  }
 }

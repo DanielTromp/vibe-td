@@ -20,57 +20,58 @@
     </div>
   </div>
   
-  <div id="gameContainer">
-    <canvas id="gameCanvas" width="600" height="400"></canvas>
-    <div id="gameOverScreen" class="hidden">
-      <h2>Game Over</h2>
-      <p>Your final score: <span id="finalScore">0</span></p>
-      <button id="restartButton">Play Again</button>
-    </div>
-  </div>
-
-  <div id="hud">
-    <div class="hud-section">
-      <h2>Build</h2>
-      <div class="button-row">
-        <button id="placeBasicTower">Basic Tower (100)</button>
-        <button id="placeRapidTower">Rapid Tower (150)</button>
-        <button id="placeSniperTower">Sniper Tower (220)</button>
-        <button id="placeFrostTower">Frost Tower (170)</button>
+  <div id="gameLayout">
+    <div id="gameContainer">
+      <canvas id="gameCanvas" width="600" height="400"></canvas>
+      <div id="gameOverScreen" class="hidden">
+        <h2>Game Over</h2>
+        <p>Your final score: <span id="finalScore">0</span></p>
+        <button id="restartButton">Play Again</button>
+      </div>
+      <div id="towerDetails" class="panel hidden">
+        <h2 id="towerTitle"></h2>
+        <p id="towerDescription"></p>
+        <p id="towerStats"></p>
+        <p id="towerUpgradeInfo"></p>
+        <div class="button-row">
+          <button id="upgradeTowerButton">Upgrade</button>
+          <button id="sellTowerButton">Sell</button>
+        </div>
       </div>
     </div>
 
-    <div class="hud-section">
-      <h2>Game Status</h2>
-      <div class="status-row">
-        <button id="pauseButton">Pause</button>
-        <button id="nextWaveButton" class="primary">Start Next Wave</button>
-        <button id="changeMapButton">Change Map</button>
-        <span id="money">Money: 0</span>
-        <span id="lives">Lives: 0</span>
-        <span id="wave">Wave: 0</span>
-        <span id="score">Score: 0</span>
+    <div id="hud">
+      <div class="hud-section">
+        <h2>Build</h2>
+        <div class="button-row">
+          <button id="placeBasicTower">Basic Tower (100)</button>
+          <button id="placeRapidTower">Rapid Tower (150)</button>
+          <button id="placeSniperTower">Sniper Tower (220)</button>
+          <button id="placeFrostTower">Frost Tower (170)</button>
+        </div>
       </div>
-      <div class="info-row">
-        <span id="waveProgress">No wave in progress</span>
-        <span id="statusMessage"></span>
-      </div>
-      <div class="info-row">
-        <span id="mapName">Map: Not selected</span>
-        <span id="currentWaveInfo"></span>
-        <span id="nextWaveInfo"></span>
-      </div>
-    </div>
-  </div>
 
-  <div id="towerDetails" class="panel hidden">
-    <h2 id="towerTitle"></h2>
-    <p id="towerDescription"></p>
-    <p id="towerStats"></p>
-    <p id="towerUpgradeInfo"></p>
-    <div class="button-row">
-      <button id="upgradeTowerButton">Upgrade</button>
-      <button id="sellTowerButton">Sell</button>
+      <div class="hud-section">
+        <h2>Game Status</h2>
+        <div class="status-row">
+          <button id="pauseButton">Pause</button>
+          <button id="nextWaveButton" class="primary">Start Next Wave</button>
+          <button id="changeMapButton">Change Map</button>
+          <span id="money">Money: 0</span>
+          <span id="lives">Lives: 0</span>
+          <span id="wave">Wave: 0</span>
+          <span id="score">Score: 0</span>
+        </div>
+        <div class="info-row">
+          <span id="waveProgress">No wave in progress</span>
+          <span id="statusMessage"></span>
+        </div>
+        <div class="info-row">
+          <span id="mapName">Map: Not selected</span>
+          <span id="currentWaveInfo"></span>
+          <span id="nextWaveInfo"></span>
+        </div>
+      </div>
     </div>
   </div>
   
