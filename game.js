@@ -188,6 +188,39 @@ function formatNumber(value, decimals = 1) {
   const factor = Math.pow(10, decimals);
   return Math.round(value * factor) / factor;
 }
+
+function colorWithAlpha(baseColor, alpha = 0.4) {
+  if (!baseColor) return 'rgba(255, 255, 255, ' + alpha + ')';
+  if (/^rgba\(/i.test(baseColor)) return baseColor;
+  if (/^rgb\(/i.test(baseColor)) {
+    const parts = baseColor.replace(/[^0-9,]/g, '').split(',').map(Number);
+    if (parts.length >= 3 && parts.slice(0, 3).every(n => !Number.isNaN(n))) {
+      const [r, g, b] = parts;
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+    }
+    return baseColor;
+  }
+  if (baseColor[0] === '#') {
+    let hex = baseColor.slice(1);
+    if (hex.length === 3) {
+      hex = hex.split('').map(char => char + char).join('');
+    }
+    if (hex.length === 6) {
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+    }
+    if (hex.length === 8) {
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      const existingAlpha = parseInt(hex.slice(6, 8), 16) / 255;
+      return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + existingAlpha + ')';
+    }
+  }
+  return baseColor;
+}
 /* --------------------------------------------------
    4. AUDIO HELPERS
    -------------------------------------------------- */
@@ -498,7 +531,7 @@ class Tower {
     this.trailColor = config.trailColor || config.projectileColor;
     this.levelStats = config.levelStats;
     this.upgradeCosts = config.upgradeCosts;
-    this.rangeRingColor = config.rangeRingColor || 'rgba(255, 255, 255, 0.2)';
+    this.rangeRingColor = colorWithAlpha(config.rangeRingColor || config.bodyColor, 0.45);
     this.sellRatio = SELL_REFUND_RATIO;
 
     this.level = 1;
@@ -594,11 +627,13 @@ class Tower {
     ctx.fillStyle = this.color;
     ctx.fillRect(this.x, this.y, this.w, this.h);
 
+    ctx.save();
     ctx.strokeStyle = this.rangeRingColor;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(this.centerX, this.centerY, this.range, 0, Math.PI * 2);
     ctx.stroke();
+    ctx.restore();
 
     ctx.fillStyle = '#111';
     ctx.font = 'bold 12px sans-serif';
@@ -946,15 +981,25 @@ function updateTowerButtons() {
 function setStatusMessage(message, duration = STATUS_DEFAULT_DURATION) {
   statusMessage = message;
   statusMessageTimer = duration;
-  const el = document.getElementById('statusMessage');
-  if (el) el.textContent = message;
+  const legacy = document.getElementById('statusMessage');
+  if (legacy) legacy.textContent = message;
+  const overlay = document.getElementById('statusMessageOverlay');
+  if (overlay) {
+    overlay.textContent = message;
+    overlay.classList.add('visible');
+  }
 }
 
 function clearStatusMessage() {
   statusMessage = '';
   statusMessageTimer = 0;
-  const el = document.getElementById('statusMessage');
-  if (el) el.textContent = '';
+  const legacy = document.getElementById('statusMessage');
+  if (legacy) legacy.textContent = '';
+  const overlay = document.getElementById('statusMessageOverlay');
+  if (overlay) {
+    overlay.textContent = '';
+    overlay.classList.remove('visible');
+  }
 }
 
 function positionTowerDetails(tower) {
