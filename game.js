@@ -62,6 +62,80 @@ const MAP_LIBRARY = [
       { row: 5, col: 11 }, { row: 4, col: 11 }, { row: 3, col: 11 }, { row: 3, col: 12 },
       { row: 3, col: 13 }, { row: 3, col: 14 }
     ]
+  },
+  {
+    id: 'serpentine-expanse',
+    name: 'Serpentine Expanse',
+    description: 'A screen-spanning snake that maximises road length while keeping a single-tile buffer for tower placements.',
+    layout: [
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    ],
+    path: [
+      { row: 1, col: 0 }, { row: 1, col: 1 }, { row: 1, col: 2 }, { row: 1, col: 3 }, { row: 1, col: 4 },
+      { row: 1, col: 5 }, { row: 1, col: 6 }, { row: 1, col: 7 }, { row: 1, col: 8 }, { row: 1, col: 9 },
+      { row: 1, col: 10 }, { row: 1, col: 11 }, { row: 1, col: 12 }, { row: 1, col: 13 }, { row: 1, col: 14 },
+      { row: 2, col: 14 }, { row: 3, col: 14 },
+      { row: 3, col: 13 }, { row: 3, col: 12 }, { row: 3, col: 11 }, { row: 3, col: 10 }, { row: 3, col: 9 },
+      { row: 3, col: 8 }, { row: 3, col: 7 }, { row: 3, col: 6 }, { row: 3, col: 5 }, { row: 3, col: 4 },
+      { row: 3, col: 3 }, { row: 3, col: 2 }, { row: 3, col: 1 }, { row: 3, col: 0 },
+      { row: 4, col: 0 }, { row: 5, col: 0 },
+      { row: 5, col: 1 }, { row: 5, col: 2 }, { row: 5, col: 3 }, { row: 5, col: 4 }, { row: 5, col: 5 },
+      { row: 5, col: 6 }, { row: 5, col: 7 }, { row: 5, col: 8 }, { row: 5, col: 9 }, { row: 5, col: 10 },
+      { row: 5, col: 11 }, { row: 5, col: 12 }, { row: 5, col: 13 }, { row: 5, col: 14 },
+      { row: 6, col: 14 }, { row: 7, col: 14 },
+      { row: 7, col: 13 }, { row: 7, col: 12 }, { row: 7, col: 11 }, { row: 7, col: 10 }, { row: 7, col: 9 },
+      { row: 7, col: 8 }, { row: 7, col: 7 }, { row: 7, col: 6 }, { row: 7, col: 5 }, { row: 7, col: 4 },
+      { row: 7, col: 3 }, { row: 7, col: 2 }, { row: 7, col: 1 }, { row: 7, col: 0 },
+      { row: 8, col: 0 }, { row: 9, col: 0 },
+      { row: 9, col: 1 }, { row: 9, col: 2 }, { row: 9, col: 3 }, { row: 9, col: 4 }, { row: 9, col: 5 },
+      { row: 9, col: 6 }, { row: 9, col: 7 }, { row: 9, col: 8 }, { row: 9, col: 9 }, { row: 9, col: 10 },
+      { row: 9, col: 11 }, { row: 9, col: 12 }, { row: 9, col: 13 }, { row: 9, col: 14 }
+    ]
+  },
+  {
+    id: 'skybridge-grid',
+    name: 'Skybridge Grid',
+    description: 'A layered city grid featuring elevated connectors that weave between long straight avenues.',
+    layout: [
+      [0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,3,0,3,0,3,0,3,0,3,0,3,0,3,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,3,0,3,0,3,0,3,0,3,0,3,0,3,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,3,0,3,0,3,0,3,0,3,0,3,0,3,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+      [0,3,0,3,0,3,0,3,0,3,0,3,0,3,0],
+      [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    ],
+    path: [
+      { row: 0, col: 1 }, { row: 1, col: 1 },
+      { row: 1, col: 2 }, { row: 1, col: 3 }, { row: 1, col: 4 }, { row: 1, col: 5 }, { row: 1, col: 6 },
+      { row: 1, col: 7 }, { row: 1, col: 8 }, { row: 1, col: 9 }, { row: 1, col: 10 }, { row: 1, col: 11 },
+      { row: 1, col: 12 }, { row: 1, col: 13 },
+      { row: 2, col: 13 }, { row: 3, col: 13 },
+      { row: 3, col: 12 }, { row: 3, col: 11 }, { row: 3, col: 10 }, { row: 3, col: 9 }, { row: 3, col: 8 },
+      { row: 3, col: 7 }, { row: 3, col: 6 }, { row: 3, col: 5 }, { row: 3, col: 4 }, { row: 3, col: 3 },
+      { row: 4, col: 3 }, { row: 5, col: 3 },
+      { row: 5, col: 4 }, { row: 5, col: 5 }, { row: 5, col: 6 }, { row: 5, col: 7 }, { row: 5, col: 8 },
+      { row: 5, col: 9 }, { row: 5, col: 10 }, { row: 5, col: 11 },
+      { row: 6, col: 11 }, { row: 7, col: 11 },
+      { row: 7, col: 10 }, { row: 7, col: 9 }, { row: 7, col: 8 }, { row: 7, col: 7 }, { row: 7, col: 6 },
+      { row: 7, col: 5 }, { row: 7, col: 4 }, { row: 7, col: 3 }, { row: 7, col: 2 }, { row: 7, col: 1 },
+      { row: 8, col: 1 }, { row: 9, col: 1 },
+      { row: 9, col: 2 }, { row: 9, col: 3 }, { row: 9, col: 4 }, { row: 9, col: 5 }, { row: 9, col: 6 },
+      { row: 9, col: 7 }, { row: 9, col: 8 }, { row: 9, col: 9 }, { row: 9, col: 10 }, { row: 9, col: 11 },
+      { row: 9, col: 12 }, { row: 9, col: 13 }
+    ]
   }
 ];
 
@@ -1298,8 +1372,23 @@ function render() {
       const tile = MAP[r][c];
       if (tile === 1) ctx.fillStyle = '#757575';
       else if (tile === 2) ctx.fillStyle = '#37474f';
+      else if (tile === 3) ctx.fillStyle = '#546e7a';
       else ctx.fillStyle = '#cfd8dc';
-      ctx.fillRect(c * TILE_SIZE, r * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+      const tileX = c * TILE_SIZE;
+      const tileY = r * TILE_SIZE;
+      ctx.fillRect(tileX, tileY, TILE_SIZE, TILE_SIZE);
+
+      if (tile === 3) {
+        ctx.strokeStyle = '#b0bec5';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(tileX + 4, tileY + 10);
+        ctx.lineTo(tileX + TILE_SIZE - 4, tileY + 10);
+        ctx.moveTo(tileX + 4, tileY + TILE_SIZE - 10);
+        ctx.lineTo(tileX + TILE_SIZE - 4, tileY + TILE_SIZE - 10);
+        ctx.stroke();
+        ctx.lineWidth = 1;
+      }
     }
   }
 
